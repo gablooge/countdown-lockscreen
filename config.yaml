@@ -1,0 +1,70 @@
+# Countdown lock screen config. Edit this file, then re-run make_lockscreen.py.
+# Avoid em dashes in any text below; it is shown on the image.
+
+deadline:
+  title: "Send 15 job applications"
+  target: "2026-12-15 17:00"      # local time in the timezone below
+  timezone: "Asia/Jakarta"        # WIB, UTC+7
+
+# Progress indicator: one segment per application.
+# Bump `current` as you send applications and re-render.
+progress:
+  label: "SENT"
+  current: 0
+  total: 15
+
+# Dated in order, ending on the deadline. Keep titles short (they must fit on a phone).
+milestones:
+  - date: 2026-11-24
+    title: "Polish resume and profile"
+    done_when: "Resume PDF exported and Handshake profile at 100%"
+  - date: 2026-11-27
+    title: "Shortlist 25 target roles"
+    done_when: "25 roles in a tracker with links and close dates"
+  - date: 2026-12-02
+    title: "Send first 5 applications"
+    done_when: "Tracker shows 5 roles marked Applied"
+  - date: 2026-12-07
+    title: "Send 5 more (10 total)"
+    done_when: "Tracker shows 10 roles marked Applied"
+  - date: 2026-12-10
+    title: "Follow up on first batch"
+    done_when: "A follow-up note sent for each of the first 5"
+  - date: 2026-12-15
+    title: "Send final 5 (15 total)"
+    done_when: "Tracker shows 15 roles marked Applied by 17:00 WIB"
+
+style:
+  background: "#0B0F12"
+  background_glow: "#0F2A2A"      # soft radial glow behind the countdown; set equal to background to disable
+  text: "#E8EEF0"
+  muted: "#7C8A90"
+  faint: "#2A3338"
+  accent: "#2DD4BF"               # teal
+  # Fonts are tried in order; system fonts only, nothing is downloaded.
+  fonts:
+    - path: "/System/Library/Fonts/SFNSMono.ttf"   # variable font (macOS)
+      regular: "Regular"
+      bold: "Bold"
+    - path: "/System/Library/Fonts/Menlo.ttc"
+      regular_index: 0
+      bold_index: 1
+    - path: "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+      bold_path: "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf"
+
+outputs:
+  - name: "lockscreen_iphone_1179x2556"
+    size: [1179, 2556]
+    kind: phone
+  - name: "lockscreen_android_1080x2400"
+    size: [1080, 2400]
+    kind: phone
+  - name: "lockscreen_desktop_2560x1440"
+    size: [2560, 1440]
+    kind: desktop
+
+safe_zone:
+  phone_top: 0.30       # keep clear for the system clock
+  phone_bottom: 0.12    # keep clear for flashlight / camera / home bar
+  desktop_top: 0.30     # macOS lock screen clock
+  desktop_bottom: 0.18  # login field / user picture
