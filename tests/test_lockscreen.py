@@ -71,6 +71,15 @@ class CountdownState(unittest.TestCase):
         c["milestones"][0]["title"] = 2026
         self.assertEqual(ml.load_state(c, "2026-11-22")["milestones"][0]["title"], "2026")
 
+    def test_committed_config_is_a_valid_plan(self):
+        st = ml.load_state(cfg(), "2026-11-23")
+        dates = [m["date"] for m in st["milestones"]]
+        self.assertGreaterEqual(len(dates), 4)
+        self.assertLessEqual(len(dates), 7)
+        self.assertEqual(dates, sorted(dates))
+        self.assertEqual(len(set(dates)), len(dates), "two milestones on one day")
+        self.assertEqual(dates[-1], st["target"].date(), "plan must end on the deadline")
+
     def test_rejects_em_dash(self):
         c = cfg()
         c["deadline"]["title"] = "Apply \N{EM DASH} now"
@@ -125,6 +134,18 @@ class SafeZone(unittest.TestCase):
             for out in c["outputs"]:
                 with redirect_stdout(io.StringIO()):
                     self.assertEqual(ml.render(c, st, out, fonts, False, out_dir=Path(tmp)), [], out["name"])
+
+    def test_truncated_timeline_title_fails_the_check(self):
+        c = cfg()
+        c["milestones"][1]["title"] = "Shortlist 25 target roles across three job boards and referrals"
+        st = ml.load_state(c, "2026-11-23")
+        fonts = ml.Fonts(c["style"]["fonts"])
+        with tempfile.TemporaryDirectory() as tmp:
+            for out in c["outputs"]:
+                with redirect_stdout(io.StringIO()):
+                    bad = ml.render(c, st, out, fonts, False, out_dir=Path(tmp))
+                self.assertTrue(any("truncated" in text for text, _ in bad), out["name"])
+                self.assertFalse((Path(tmp) / f"{out['name']}.png").exists())
 
     def test_failed_render_keeps_previous_png(self):
         c = cfg()
