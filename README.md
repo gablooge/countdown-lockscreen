@@ -24,8 +24,9 @@ python3 -m venv .venv
 .venv/bin/python make_reminders.py             # reminders.ics
 ```
 
-`make_lockscreen.py` exits with an error if any text or shape lands outside the safe zone
-(top 30% and bottom 12% on phones are kept clear for the system clock and controls).
+`make_lockscreen.py` exits with an error, and keeps the previous PNG, if any text or shape
+lands outside the safe zone (top 30% and bottom 12% on phones are kept clear for the system
+clock and controls) or a milestone title is too long and would be cut off with "...".
 
 Preview another moment without touching `out/`:
 

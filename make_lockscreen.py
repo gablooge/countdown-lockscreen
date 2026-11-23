@@ -144,6 +144,7 @@ class Ctx:
         self.st = state
         self.dry = True
         self.boxes = []
+        self.problems = []  # text that had to be shortened to fit; fails the render like a zone overflow
 
     def text(self, xy, s, font, fill, anchor="ls"):
         if self.dry:
@@ -346,7 +347,10 @@ def b_timeline(cx, x, y, w, sc):
             cx.shape("ellipse", [dot_x - r, cy - r, dot_x + r, cy + r], fill=c["bg"], outline=c["muted"], width=max(1, round(3 * sc)))
             dcol, tcol, tf = c["muted"], c["text"], f
         cx.text((date_x, cy), fmt_day(m["date"]), f, dcol, anchor="lm")
-        cx.text((title_x, cy), ellipsize(m["title"], tf, x + w - title_x), tf, tcol, anchor="lm")
+        shown = ellipsize(m["title"], tf, x + w - title_x)
+        cx.text((title_x, cy), shown, tf, tcol, anchor="lm")
+        if shown != m["title"] and not cx.dry:
+            cx.problems.append((f"<truncated> {m['title']}", (title_x, cy, x + w, cy)))
     return row * len(ms)
 
 
@@ -446,12 +450,13 @@ def render(cfg, state, out, fonts, guides, out_dir=ROOT / "out"):
     # verify nothing escapes the safe zone
     bad = [(t, b) for t, b in cx.boxes
            if b[0] < safe[0] - 1 or b[1] < safe[1] - 1 or b[2] > safe[2] + 1 or b[3] > safe[3] + 1]
+    bad += cx.problems
 
     out_dir = Path(out_dir)
     path = out_dir / f"{out['name']}.png"
     path.parent.mkdir(parents=True, exist_ok=True)
     if bad:  # keep the last good lock screen; the guides preview below still shows what went wrong
-        print(f"NOT saved {path}: layout leaves the safe zone")
+        print(f"NOT saved {path}: text leaves the safe zone or had to be truncated")
     else:
         img.save(path, optimize=True)
         print(f"wrote {path}  ({W}x{H}, scale {sc / base:.2f})")
@@ -495,7 +500,7 @@ def main():
             continue
         for text, box in render(cfg, state, out, fonts, a.guides, a.out_dir):
             failed = True
-            print(f"  OUT OF SAFE ZONE in {out['name']}: {text!r} at {tuple(round(v) for v in box)}")
+            print(f"  DOES NOT FIT in {out['name']}: {text!r} at {tuple(round(v) for v in box)}")
     sys.exit(1 if failed else 0)
 
 
