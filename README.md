@@ -78,3 +78,7 @@ close the loop, sync `out/` to iCloud Drive and use an iOS Shortcuts personal au
 | `make_lockscreen.py` | Pillow renderer (system fonts only, no network) |
 | `make_reminders.py` | Writes `reminders.ics` (no extra dependency) |
 | `out/` | Rendered PNGs; `out/preview/` holds safe-zone check images (don't submit those) |
+
+## License
+
+MIT, see [LICENSE](LICENSE).
