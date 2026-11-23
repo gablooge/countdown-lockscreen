@@ -48,13 +48,15 @@ def parse_target(value, tz):
 
 
 def parse_now(override, tz):
-    """`override` is None (real clock), "YYYY-MM-DD" (start of that day) or "YYYY-MM-DD HH:MM"."""
+    """`override` is None (real clock), a date (start of that day) or an ISO datetime
+    such as "YYYY-MM-DD HH:MM", "YYYY-MM-DDTHH:MM:SS"; naive values are in `tz`."""
     if override is None:
         return datetime.now(tz)
-    s = str(override)
-    if " " in s:
-        return datetime.strptime(s, "%Y-%m-%d %H:%M").replace(tzinfo=tz)
-    return datetime.combine(to_date(override), time.min, tzinfo=tz)
+    s = str(override).strip()
+    if len(s) == 10:
+        return datetime.combine(to_date(s), time.min, tzinfo=tz)
+    dt = datetime.fromisoformat(s)
+    return dt.replace(tzinfo=tz) if dt.tzinfo is None else dt.astimezone(tz)
 
 
 def load_state(cfg, today_override=None):
@@ -65,7 +67,8 @@ def load_state(cfg, today_override=None):
     today = now.date()
     passed = now >= target
 
-    ms = [{**m, "date": to_date(m["date"])} for m in cfg["milestones"]]
+    ms = [{**m, "date": to_date(m["date"]), "title": str(m["title"]), "done_when": str(m.get("done_when") or "")}
+          for m in (cfg.get("milestones") or [])]
     for a, b in zip(ms, ms[1:]):
         if b["date"] < a["date"]:
             sys.exit(f"config error: milestones out of order ({a['date']} then {b['date']})")
@@ -73,20 +76,31 @@ def load_state(cfg, today_override=None):
         print(f"warning: last milestone ({ms[-1]['date']}) is not on the deadline ({target.date()})")
 
     nxt = None if passed else next((i for i, m in enumerate(ms) if m["date"] >= today), None)
-    for t in [dl["title"]] + [m["title"] for m in ms] + [m.get("done_when", "") for m in ms]:
+    for t in [str(dl["title"])] + [m["title"] for m in ms] + [m["done_when"] for m in ms]:
         if "\N{EM DASH}" in t:
             sys.exit(f"config error: em dash in {t!r}")
 
     return {
-        "title": dl["title"],
+        "title": str(dl["title"]),
         "target": target,
         "tzname": target.tzname() or dl["timezone"],
+        "now": now,
         "today": today,
+        "passed": passed,
         "days": -1 if passed else (target.date() - today).days,
         "milestones": ms,
         "next": nxt,
-        "progress": cfg.get("progress", {}),
+        "progress": cfg.get("progress") or {},
     }
+
+
+def milestone_status(st, i):
+    """"past", "next" or "future" for milestone i. Everything is past once the deadline passes."""
+    if i == st["next"]:
+        return "next"
+    if st["passed"] or st["milestones"][i]["date"] < st["today"]:
+        return "past"
+    return "future"
 
 
 # ---------------------------------------------------------------- fonts
@@ -250,10 +264,16 @@ def b_progress(cx, x, y, w, sc):
     g = 10 * sc
     sh = 22 * sc
     sw = (w - g * (total - 1)) / total
-    for i in range(total):
-        sx = x + i * (sw + g)
-        cx.shape("rounded_rectangle", [sx, y, sx + sw, y + sh], radius=4 * sc,
-                 fill=c["accent"] if i < cur else c["faint"])
+    if sw >= 12 * sc:  # one segment per item
+        for i in range(total):
+            sx = x + i * (sw + g)
+            cx.shape("rounded_rectangle", [sx, y, sx + sw, y + sh], radius=4 * sc,
+                     fill=c["accent"] if i < cur else c["faint"])
+    else:  # too many items for segments: plain bar
+        cx.shape("rounded_rectangle", [x, y, x + w, y + sh], radius=4 * sc, fill=c["faint"])
+        if cur:
+            cx.shape("rounded_rectangle", [x, y, x + max(w * cur / total, 8 * sc), y + sh], radius=4 * sc,
+                     fill=c["accent"])
     f = cx.fonts.get(30 * sc)
     base = y + sh + 22 * sc + f.getmetrics()[0]
     cx.text((x, base), f"{cur}/{total} {p.get('label', '')}".strip(), f, c["text"])
@@ -313,14 +333,13 @@ def b_timeline(cx, x, y, w, sc):
     centers = [y + row * i + row / 2 for i in range(len(ms))]
     cx.shape("line", [(dot_x, centers[0]), (dot_x, centers[-1])], fill=c["faint"], width=max(1, round(3 * sc)))
     for i, (m, cy) in enumerate(zip(ms, centers)):
-        is_next = i == st["next"]
-        is_past = m["date"] < st["today"]
-        if is_next:
+        status = milestone_status(st, i)
+        if status == "next":
             R = r * 1.9
             cx.shape("ellipse", [dot_x - R, cy - R, dot_x + R, cy + R], outline=c["accent"], width=max(1, round(2 * sc)), fill=c["bg"])
             cx.shape("ellipse", [dot_x - r, cy - r, dot_x + r, cy + r], fill=c["accent"])
             dcol, tcol, tf = c["accent"], c["text"], fb
-        elif is_past:
+        elif status == "past":
             cx.shape("ellipse", [dot_x - r, cy - r, dot_x + r, cy + r], fill=c["muted"])
             dcol, tcol, tf = c["faint_text"], c["faint_text"], f
         else:
@@ -431,8 +450,11 @@ def render(cfg, state, out, fonts, guides, out_dir=ROOT / "out"):
     out_dir = Path(out_dir)
     path = out_dir / f"{out['name']}.png"
     path.parent.mkdir(parents=True, exist_ok=True)
-    img.save(path, optimize=True)
-    print(f"wrote {path}  ({W}x{H}, scale {sc / base:.2f})")
+    if bad:  # keep the last good lock screen; the guides preview below still shows what went wrong
+        print(f"NOT saved {path}: layout leaves the safe zone")
+    else:
+        img.save(path, optimize=True)
+        print(f"wrote {path}  ({W}x{H}, scale {sc / base:.2f})")
 
     if guides:
         g = img.convert("RGBA")
@@ -464,7 +486,8 @@ def main():
     cfg = yaml.safe_load(Path(a.config).read_text())
     state = load_state(cfg, a.today)
     fonts = Fonts(cfg["style"]["fonts"])
-    print(f"{state['title']}: {state['days']} days left (today {state['today']}, {state['tzname']})")
+    left = "deadline passed" if state["passed"] else f"{state['days']} days left"
+    print(f"{state['title']}: {left} (now {state['now']:%Y-%m-%d %H:%M} {state['tzname']})")
 
     failed = False
     for out in cfg["outputs"]:
