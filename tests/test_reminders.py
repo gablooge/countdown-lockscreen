@@ -34,6 +34,20 @@ class Ics(unittest.TestCase):
         self.assertNotIn("DTSTART:20261216T", text)
         self.assertEqual(text.count("DTSTART;VALUE=DATE:"), 6)
 
+    def test_no_daily_reminder_after_deadline(self):
+        text = generate("2026-12-15 18:00").decode()
+        self.assertNotIn("Due today", text)
+        self.assertEqual(text.count("DTSTART:"), 0)
+        self.assertEqual(text.count("DTSTART;VALUE=DATE:"), 6)
+
+    def test_skips_todays_reminder_once_its_time_passed(self):
+        text = generate("2026-11-23 09:30").decode()
+        self.assertNotIn("DTSTART:20261123T", text)
+        self.assertIn("DTSTART:20261124T010000Z", text)
+        self.assertEqual(text.count("DTSTART:"), 22)  # Nov 24 .. Dec 15
+        text = generate("2026-11-23 07:59").decode()
+        self.assertIn("DTSTART:20261123T010000Z", text)
+
     def test_fold_keeps_utf8_intact(self):
         line = "SUMMARY:" + "x" * 66 + "é" * 20
         folded = mr.fold(line)
