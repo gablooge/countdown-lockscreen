@@ -2,11 +2,13 @@
 """Write reminders.ics from config.yaml.
 
 - One daily 08:00 event (deadline timezone) from today through the deadline day,
-  titled with the days left and the next milestone.
+  titled with the days left and the next milestone. Reminders whose time has already
+  passed are skipped, so nothing is written once the deadline is over.
 - One all-day event on each milestone date.
 
 Import into Google Calendar: Settings > Import & export > Import > reminders.ics.
-Re-running produces the same UIDs, so re-importing updates events instead of duplicating them.
+Event UIDs stay the same across runs; whether a re-import updates existing events
+depends on the calendar app.
 """
 import argparse
 from datetime import datetime, timedelta, timezone
@@ -43,7 +45,7 @@ def utc(dt):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--config", default=ROOT / "config.yaml")
-    ap.add_argument("--today", help="override start date (YYYY-MM-DD)")
+    ap.add_argument("--today", help='override the clock: "YYYY-MM-DD" or "YYYY-MM-DD HH:MM"')
     ap.add_argument("--out", default=ROOT / "reminders.ics")
     a = ap.parse_args()
 
@@ -72,6 +74,10 @@ def main():
     n_daily = 0
     day = st["today"]
     while day <= target.date():
+        start = datetime(day.year, day.month, day.day, *REMIND_AT, tzinfo=tz)
+        if start < st["now"] or start >= target:
+            day += timedelta(days=1)
+            continue
         left = (target.date() - day).days
         nxt = next((m for m in ms if m["date"] >= day), None)
         if left == 0:
@@ -83,7 +89,6 @@ def main():
         if nxt and nxt.get("done_when"):
             desc += f"\nNext milestone done when: {nxt['done_when']}"
         desc += "\nRe-render the lock screen: python make_lockscreen.py"
-        start = datetime(day.year, day.month, day.day, *REMIND_AT, tzinfo=tz)
         event(f"{slug}-daily-{day:%Y%m%d}", summary, desc, start, start + timedelta(minutes=15), alarm=True)
         day += timedelta(days=1)
         n_daily += 1

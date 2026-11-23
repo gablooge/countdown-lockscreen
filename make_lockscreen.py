@@ -11,7 +11,7 @@ The script exits non-zero if any text would land outside the safe zone.
 """
 import argparse
 import sys
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 
 import yaml
@@ -40,34 +40,67 @@ def to_date(v):
     return date.fromisoformat(str(v))
 
 
+def parse_target(value, tz):
+    """Accept the quoted "YYYY-MM-DD HH:MM" string or a datetime that YAML parsed on its own."""
+    if isinstance(value, datetime):
+        return value.replace(tzinfo=tz) if value.tzinfo is None else value.astimezone(tz)
+    return datetime.strptime(str(value), "%Y-%m-%d %H:%M").replace(tzinfo=tz)
+
+
+def parse_now(override, tz):
+    """`override` is None (real clock), a date (start of that day) or an ISO datetime
+    such as "YYYY-MM-DD HH:MM", "YYYY-MM-DDTHH:MM:SS"; naive values are in `tz`."""
+    if override is None:
+        return datetime.now(tz)
+    s = str(override).strip()
+    if len(s) == 10:
+        return datetime.combine(to_date(s), time.min, tzinfo=tz)
+    dt = datetime.fromisoformat(s)
+    return dt.replace(tzinfo=tz) if dt.tzinfo is None else dt.astimezone(tz)
+
+
 def load_state(cfg, today_override=None):
     dl = cfg["deadline"]
     tz = tz_for(dl["timezone"])
-    target = datetime.strptime(dl["target"], "%Y-%m-%d %H:%M").replace(tzinfo=tz)
-    today = to_date(today_override) if today_override else datetime.now(tz).date()
+    target = parse_target(dl["target"], tz)
+    now = parse_now(today_override, tz)
+    today = now.date()
+    passed = now >= target
 
-    ms = [{**m, "date": to_date(m["date"])} for m in cfg["milestones"]]
+    ms = [{**m, "date": to_date(m["date"]), "title": str(m["title"]), "done_when": str(m.get("done_when") or "")}
+          for m in (cfg.get("milestones") or [])]
     for a, b in zip(ms, ms[1:]):
         if b["date"] < a["date"]:
             sys.exit(f"config error: milestones out of order ({a['date']} then {b['date']})")
     if ms and ms[-1]["date"] != target.date():
         print(f"warning: last milestone ({ms[-1]['date']}) is not on the deadline ({target.date()})")
 
-    nxt = next((i for i, m in enumerate(ms) if m["date"] >= today), None)
-    for t in [dl["title"]] + [m["title"] for m in ms] + [m.get("done_when", "") for m in ms]:
+    nxt = None if passed else next((i for i, m in enumerate(ms) if m["date"] >= today), None)
+    for t in [str(dl["title"])] + [m["title"] for m in ms] + [m["done_when"] for m in ms]:
         if "\N{EM DASH}" in t:
             sys.exit(f"config error: em dash in {t!r}")
 
     return {
-        "title": dl["title"],
+        "title": str(dl["title"]),
         "target": target,
         "tzname": target.tzname() or dl["timezone"],
+        "now": now,
         "today": today,
-        "days": (target.date() - today).days,
+        "passed": passed,
+        "days": -1 if passed else (target.date() - today).days,
         "milestones": ms,
         "next": nxt,
-        "progress": cfg.get("progress", {}),
+        "progress": cfg.get("progress") or {},
     }
+
+
+def milestone_status(st, i):
+    """"past", "next" or "future" for milestone i. Everything is past once the deadline passes."""
+    if i == st["next"]:
+        return "next"
+    if st["passed"] or st["milestones"][i]["date"] < st["today"]:
+        return "past"
+    return "future"
 
 
 # ---------------------------------------------------------------- fonts
@@ -129,9 +162,13 @@ class Ctx:
             cx += font.getlength(ch) + tracking
         return w
 
-    def shape(self, fn, *a, **k):
-        if not self.dry:
-            getattr(self.d, fn)(*a, **k)
+    def shape(self, fn, xy, **k):
+        if self.dry:
+            return
+        getattr(self.d, fn)(xy, **k)
+        pts = [tuple(p) for p in xy] if isinstance(xy[0], (tuple, list)) else [tuple(xy[:2]), tuple(xy[2:])]
+        xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+        self.boxes.append((f"<{fn}>", (min(xs), min(ys), max(xs), max(ys))))
 
 
 def wrap(text, font, width):
@@ -227,10 +264,16 @@ def b_progress(cx, x, y, w, sc):
     g = 10 * sc
     sh = 22 * sc
     sw = (w - g * (total - 1)) / total
-    for i in range(total):
-        sx = x + i * (sw + g)
-        cx.shape("rounded_rectangle", [sx, y, sx + sw, y + sh], radius=4 * sc,
-                 fill=c["accent"] if i < cur else c["faint"])
+    if sw >= 12 * sc:  # one segment per item
+        for i in range(total):
+            sx = x + i * (sw + g)
+            cx.shape("rounded_rectangle", [sx, y, sx + sw, y + sh], radius=4 * sc,
+                     fill=c["accent"] if i < cur else c["faint"])
+    else:  # too many items for segments: plain bar
+        cx.shape("rounded_rectangle", [x, y, x + w, y + sh], radius=4 * sc, fill=c["faint"])
+        if cur:
+            cx.shape("rounded_rectangle", [x, y, x + max(w * cur / total, 8 * sc), y + sh], radius=4 * sc,
+                     fill=c["accent"])
     f = cx.fonts.get(30 * sc)
     base = y + sh + 22 * sc + f.getmetrics()[0]
     cx.text((x, base), f"{cur}/{total} {p.get('label', '')}".strip(), f, c["text"])
@@ -290,14 +333,13 @@ def b_timeline(cx, x, y, w, sc):
     centers = [y + row * i + row / 2 for i in range(len(ms))]
     cx.shape("line", [(dot_x, centers[0]), (dot_x, centers[-1])], fill=c["faint"], width=max(1, round(3 * sc)))
     for i, (m, cy) in enumerate(zip(ms, centers)):
-        is_next = i == st["next"]
-        is_past = m["date"] < st["today"]
-        if is_next:
+        status = milestone_status(st, i)
+        if status == "next":
             R = r * 1.9
             cx.shape("ellipse", [dot_x - R, cy - R, dot_x + R, cy + R], outline=c["accent"], width=max(1, round(2 * sc)), fill=c["bg"])
             cx.shape("ellipse", [dot_x - r, cy - r, dot_x + r, cy + r], fill=c["accent"])
             dcol, tcol, tf = c["accent"], c["text"], fb
-        elif is_past:
+        elif status == "past":
             cx.shape("ellipse", [dot_x - r, cy - r, dot_x + r, cy + r], fill=c["muted"])
             dcol, tcol, tf = c["faint_text"], c["faint_text"], f
         else:
@@ -328,7 +370,7 @@ def fit_scale(cx, columns, zone_h, start):
     sc = start
     for _ in range(40):
         cx.dry = True
-        tallest = max(stack(cx, blocks, 0, 0, w(sc) if callable(w) else w, sc) for blocks, w in columns)
+        tallest = max(stack(cx, blocks, 0, 0, w, sc) for blocks, w in columns)
         if tallest <= zone_h:
             return sc
         sc *= max(0.9, min(0.995, zone_h / tallest))
@@ -360,7 +402,7 @@ def background(W, H, bg, glow, center, radius):
     return img
 
 
-def render(cfg, state, out, fonts, guides):
+def render(cfg, state, out, fonts, guides, out_dir=ROOT / "out"):
     s = cfg["style"]
     colors = {k: hex2rgb(s[k]) for k in ("background", "text", "muted", "faint", "accent")}
     colors["bg"] = colors["background"]
@@ -405,10 +447,14 @@ def render(cfg, state, out, fonts, guides):
     bad = [(t, b) for t, b in cx.boxes
            if b[0] < safe[0] - 1 or b[1] < safe[1] - 1 or b[2] > safe[2] + 1 or b[3] > safe[3] + 1]
 
-    path = ROOT / "out" / f"{out['name']}.png"
-    path.parent.mkdir(exist_ok=True)
-    img.save(path, optimize=True)
-    print(f"wrote {path.relative_to(ROOT)}  ({W}x{H}, scale {sc / base:.2f})")
+    out_dir = Path(out_dir)
+    path = out_dir / f"{out['name']}.png"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if bad:  # keep the last good lock screen; the guides preview below still shows what went wrong
+        print(f"NOT saved {path}: layout leaves the safe zone")
+    else:
+        img.save(path, optimize=True)
+        print(f"wrote {path}  ({W}x{H}, scale {sc / base:.2f})")
 
     if guides:
         g = img.convert("RGBA")
@@ -420,10 +466,10 @@ def render(cfg, state, out, fonts, guides):
         clock = fonts.get(H * (0.075 if phone else 0.09), bold=True)
         od.text((W / 2, top * 0.62), "9:41", font=clock, fill=(255, 255, 255, 200), anchor="mm")
         g = Image.alpha_composite(g, ov)
-        gp = ROOT / "out" / "preview" / f"{out['name']}_guides.png"
-        gp.parent.mkdir(exist_ok=True)
+        gp = out_dir / "preview" / f"{out['name']}_guides.png"
+        gp.parent.mkdir(parents=True, exist_ok=True)
         g.convert("RGB").save(gp)
-        print(f"wrote {gp.relative_to(ROOT)}")
+        print(f"wrote {gp}")
 
     return bad
 
@@ -431,7 +477,8 @@ def render(cfg, state, out, fonts, guides):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--config", default=ROOT / "config.yaml")
-    ap.add_argument("--today", help="override today's date (YYYY-MM-DD) for previews")
+    ap.add_argument("--today", help='override the clock for previews: "YYYY-MM-DD" or "YYYY-MM-DD HH:MM"')
+    ap.add_argument("--out-dir", default=ROOT / "out", help="where to write PNGs (default: out/)")
     ap.add_argument("--guides", action="store_true", help="also write safe-zone preview images")
     ap.add_argument("--only", choices=["phone", "desktop"], help="render only one kind")
     a = ap.parse_args()
@@ -439,13 +486,14 @@ def main():
     cfg = yaml.safe_load(Path(a.config).read_text())
     state = load_state(cfg, a.today)
     fonts = Fonts(cfg["style"]["fonts"])
-    print(f"{state['title']}: {state['days']} days left (today {state['today']}, {state['tzname']})")
+    left = "deadline passed" if state["passed"] else f"{state['days']} days left"
+    print(f"{state['title']}: {left} (now {state['now']:%Y-%m-%d %H:%M} {state['tzname']})")
 
     failed = False
     for out in cfg["outputs"]:
         if a.only and out["kind"] != a.only:
             continue
-        for text, box in render(cfg, state, out, fonts, a.guides):
+        for text, box in render(cfg, state, out, fonts, a.guides, a.out_dir):
             failed = True
             print(f"  OUT OF SAFE ZONE in {out['name']}: {text!r} at {tuple(round(v) for v in box)}")
     sys.exit(1 if failed else 0)

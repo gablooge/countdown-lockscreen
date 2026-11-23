@@ -24,10 +24,26 @@ python3 -m venv .venv
 .venv/bin/python make_reminders.py             # reminders.ics
 ```
 
-`make_lockscreen.py` exits with an error if any text lands outside the safe zone
+`make_lockscreen.py` exits with an error if any text or shape lands outside the safe zone
 (top 30% and bottom 12% on phones are kept clear for the system clock and controls).
 
-Preview a future day: `.venv/bin/python make_lockscreen.py --today 2026-12-08`
+Preview another moment without touching `out/`:
+
+```sh
+.venv/bin/python make_lockscreen.py --today 2026-12-08 --out-dir /tmp/preview
+.venv/bin/python make_lockscreen.py --today "2026-12-15 17:30" --out-dir /tmp/preview   # after the deadline
+```
+
+Once the deadline time has passed, the screen switches to DONE and stops showing a next milestone.
+
+## Tests
+
+```sh
+.venv/bin/python -m unittest discover -s tests
+```
+
+Covers the countdown edge cases around the deadline time, the safe zone on every output for
+every day of the plan, and the ICS format. The ICS parse test runs only if `icalendar` is installed.
 
 ## Updating progress
 
@@ -38,7 +54,8 @@ After each application, bump `progress.current` in `config.yaml` and re-run
 
 Google Calendar > Settings > Import & export > Import `reminders.ics`. You get a 08:00 WIB
 reminder every day until the deadline (days left + next milestone) and an all-day event on
-each milestone. Event UIDs are stable, so re-importing updates rather than duplicates.
+each milestone. Event UIDs stay the same across runs. Whether a re-import updates existing
+events depends on the calendar app, so if you change milestones, delete the old events first.
 
 ## Re-render every morning (macOS)
 
