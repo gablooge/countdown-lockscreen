@@ -1,0 +1,411 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//countdown-lockscreen//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Send 15 job applications
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261123@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261123T010000Z
+DTEND:20261123T011500Z
+SUMMARY:22 days left | Next: Polish resume and profile (Nov 24)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Resume PDF exported and Handshake profile at 1
+ 00%\nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:22 days left | Next: Polish resume and profile (Nov 24)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261124@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261124T010000Z
+DTEND:20261124T011500Z
+SUMMARY:21 days left | Next: Polish resume and profile (Nov 24)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Resume PDF exported and Handshake profile at 1
+ 00%\nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:21 days left | Next: Polish resume and profile (Nov 24)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261125@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261125T010000Z
+DTEND:20261125T011500Z
+SUMMARY:20 days left | Next: Shortlist 25 target roles (Nov 27)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: 25 roles in a tracker with links and close dat
+ es\nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:20 days left | Next: Shortlist 25 target roles (Nov 27)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261126@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261126T010000Z
+DTEND:20261126T011500Z
+SUMMARY:19 days left | Next: Shortlist 25 target roles (Nov 27)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: 25 roles in a tracker with links and close dat
+ es\nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:19 days left | Next: Shortlist 25 target roles (Nov 27)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261127@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261127T010000Z
+DTEND:20261127T011500Z
+SUMMARY:18 days left | Next: Shortlist 25 target roles (Nov 27)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: 25 roles in a tracker with links and close dat
+ es\nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:18 days left | Next: Shortlist 25 target roles (Nov 27)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261128@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261128T010000Z
+DTEND:20261128T011500Z
+SUMMARY:17 days left | Next: Send first 5 applications (Dec 2)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 5 roles marked Applied\nRe-rende
+ r the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:17 days left | Next: Send first 5 applications (Dec 2)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261129@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261129T010000Z
+DTEND:20261129T011500Z
+SUMMARY:16 days left | Next: Send first 5 applications (Dec 2)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 5 roles marked Applied\nRe-rende
+ r the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:16 days left | Next: Send first 5 applications (Dec 2)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261130@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261130T010000Z
+DTEND:20261130T011500Z
+SUMMARY:15 days left | Next: Send first 5 applications (Dec 2)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 5 roles marked Applied\nRe-rende
+ r the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:15 days left | Next: Send first 5 applications (Dec 2)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261201@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261201T010000Z
+DTEND:20261201T011500Z
+SUMMARY:14 days left | Next: Send first 5 applications (Dec 2)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 5 roles marked Applied\nRe-rende
+ r the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:14 days left | Next: Send first 5 applications (Dec 2)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261202@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261202T010000Z
+DTEND:20261202T011500Z
+SUMMARY:13 days left | Next: Send first 5 applications (Dec 2)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 5 roles marked Applied\nRe-rende
+ r the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:13 days left | Next: Send first 5 applications (Dec 2)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261203@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261203T010000Z
+DTEND:20261203T011500Z
+SUMMARY:12 days left | Next: Send 5 more (10 total) (Dec 7)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 10 roles marked Applied\nRe-rend
+ er the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:12 days left | Next: Send 5 more (10 total) (Dec 7)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261204@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261204T010000Z
+DTEND:20261204T011500Z
+SUMMARY:11 days left | Next: Send 5 more (10 total) (Dec 7)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 10 roles marked Applied\nRe-rend
+ er the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:11 days left | Next: Send 5 more (10 total) (Dec 7)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261205@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261205T010000Z
+DTEND:20261205T011500Z
+SUMMARY:10 days left | Next: Send 5 more (10 total) (Dec 7)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 10 roles marked Applied\nRe-rend
+ er the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:10 days left | Next: Send 5 more (10 total) (Dec 7)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261206@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261206T010000Z
+DTEND:20261206T011500Z
+SUMMARY:9 days left | Next: Send 5 more (10 total) (Dec 7)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 10 roles marked Applied\nRe-rend
+ er the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:9 days left | Next: Send 5 more (10 total) (Dec 7)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261207@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261207T010000Z
+DTEND:20261207T011500Z
+SUMMARY:8 days left | Next: Send 5 more (10 total) (Dec 7)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 10 roles marked Applied\nRe-rend
+ er the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:8 days left | Next: Send 5 more (10 total) (Dec 7)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261208@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261208T010000Z
+DTEND:20261208T011500Z
+SUMMARY:7 days left | Next: Follow up on first batch (Dec 10)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: A follow-up note sent for each of the first 5\
+ nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:7 days left | Next: Follow up on first batch (Dec 10)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261209@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261209T010000Z
+DTEND:20261209T011500Z
+SUMMARY:6 days left | Next: Follow up on first batch (Dec 10)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: A follow-up note sent for each of the first 5\
+ nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:6 days left | Next: Follow up on first batch (Dec 10)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261210@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261210T010000Z
+DTEND:20261210T011500Z
+SUMMARY:5 days left | Next: Follow up on first batch (Dec 10)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: A follow-up note sent for each of the first 5\
+ nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:5 days left | Next: Follow up on first batch (Dec 10)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261211@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261211T010000Z
+DTEND:20261211T011500Z
+SUMMARY:4 days left | Next: Send final 5 (15 total) (Dec 15)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 15 roles marked Applied by 17:00
+  WIB\nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:4 days left | Next: Send final 5 (15 total) (Dec 15)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261212@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261212T010000Z
+DTEND:20261212T011500Z
+SUMMARY:3 days left | Next: Send final 5 (15 total) (Dec 15)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 15 roles marked Applied by 17:00
+  WIB\nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:3 days left | Next: Send final 5 (15 total) (Dec 15)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261213@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261213T010000Z
+DTEND:20261213T011500Z
+SUMMARY:2 days left | Next: Send final 5 (15 total) (Dec 15)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 15 roles marked Applied by 17:00
+  WIB\nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:2 days left | Next: Send final 5 (15 total) (Dec 15)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261214@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261214T010000Z
+DTEND:20261214T011500Z
+SUMMARY:1 day left | Next: Send final 5 (15 total) (Dec 15)
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nNext milestone done when: Tracker shows 15 roles marked Applied by 17:00
+  WIB\nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:1 day left | Next: Send final 5 (15 total) (Dec 15)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-daily-20261215@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART:20261215T010000Z
+DTEND:20261215T011500Z
+SUMMARY:Due today 17:00: Send 15 job applications
+DESCRIPTION:Deadline: Send 15 job applications\, Tue 15 Dec 2026 17:00 WIB.
+ \nRe-render the lock screen: python make_lockscreen.py
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Due today 17:00: Send 15 job applications
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-milestone-1@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART;VALUE=DATE:20261124
+DTEND;VALUE=DATE:20261125
+TRANSP:TRANSPARENT
+SUMMARY:Milestone 1/6: Polish resume and profile
+DESCRIPTION:Milestone 1 of 6 for: Send 15 job applications\nDone when: Resu
+ me PDF exported and Handshake profile at 100%
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-milestone-2@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART;VALUE=DATE:20261127
+DTEND;VALUE=DATE:20261128
+TRANSP:TRANSPARENT
+SUMMARY:Milestone 2/6: Shortlist 25 target roles
+DESCRIPTION:Milestone 2 of 6 for: Send 15 job applications\nDone when: 25 r
+ oles in a tracker with links and close dates
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-milestone-3@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART;VALUE=DATE:20261202
+DTEND;VALUE=DATE:20261203
+TRANSP:TRANSPARENT
+SUMMARY:Milestone 3/6: Send first 5 applications
+DESCRIPTION:Milestone 3 of 6 for: Send 15 job applications\nDone when: Trac
+ ker shows 5 roles marked Applied
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-milestone-4@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART;VALUE=DATE:20261207
+DTEND;VALUE=DATE:20261208
+TRANSP:TRANSPARENT
+SUMMARY:Milestone 4/6: Send 5 more (10 total)
+DESCRIPTION:Milestone 4 of 6 for: Send 15 job applications\nDone when: Trac
+ ker shows 10 roles marked Applied
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-milestone-5@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART;VALUE=DATE:20261210
+DTEND;VALUE=DATE:20261211
+TRANSP:TRANSPARENT
+SUMMARY:Milestone 5/6: Follow up on first batch
+DESCRIPTION:Milestone 5 of 6 for: Send 15 job applications\nDone when: A fo
+ llow-up note sent for each of the first 5
+END:VEVENT
+BEGIN:VEVENT
+UID:deadline-20261215-milestone-6@countdown-lockscreen
+DTSTAMP:20261123T045348Z
+DTSTART;VALUE=DATE:20261215
+DTEND;VALUE=DATE:20261216
+TRANSP:TRANSPARENT
+SUMMARY:Milestone 6/6: Send final 5 (15 total)
+DESCRIPTION:Milestone 6 of 6 for: Send 15 job applications\nDone when: Trac
+ ker shows 15 roles marked Applied by 17:00 WIB
+END:VEVENT
+END:VCALENDAR
