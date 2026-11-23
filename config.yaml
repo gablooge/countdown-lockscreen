@@ -13,26 +13,27 @@ progress:
   current: 0
   total: 15
 
-# Dated in order, ending on the deadline. Keep titles short (they must fit on a phone).
+# Dated in order, ending on the deadline. Planned with Gemini on 2026-11-23.
+# Keep titles short (they must fit on a phone).
 milestones:
-  - date: 2026-11-24
-    title: "Polish resume and profile"
-    done_when: "Resume PDF exported and Handshake profile at 100%"
-  - date: 2026-11-27
+  - date: 2026-11-29
+    title: "Finish CV, GitHub, cover letter"
+    done_when: "Resume PDF exported, READMEs polished, cover letter base ready"
+  - date: 2026-12-03
     title: "Shortlist 25 target roles"
-    done_when: "25 roles in a tracker with links and close dates"
-  - date: 2026-12-02
-    title: "Send first 5 applications"
-    done_when: "Tracker shows 5 roles marked Applied"
-  - date: 2026-12-07
-    title: "Send 5 more (10 total)"
-    done_when: "Tracker shows 10 roles marked Applied"
+    done_when: "25 high-fit roles in a tracker with links and deadlines"
+  - date: 2026-12-06
+    title: "Submit first 4 applications"
+    done_when: "4 tailored applications sent at 45 to 60 min each"
   - date: 2026-12-10
-    title: "Follow up on first batch"
-    done_when: "A follow-up note sent for each of the first 5"
+    title: "Reach 8 of 15 apps sent"
+    done_when: "8 applications sent, no drafts left open"
+  - date: 2026-12-13
+    title: "Reach 12 of 15 apps sent"
+    done_when: "12 sent after a 4-app weekend push"
   - date: 2026-12-15
-    title: "Send final 5 (15 total)"
-    done_when: "Tracker shows 15 roles marked Applied by 17:00 WIB"
+    title: "Submit final 3 apps (15/15)"
+    done_when: "15 sent by 17:00 WIB, confirmations archived, tracker logged"
 
 style:
   background: "#0B0F12"
